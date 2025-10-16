@@ -10,6 +10,7 @@ public class HomeController {
 
     @GetMapping("/")
     public ResponseEntity getHomePage(@RequestParam(value = "name", defaultValue = "Robert") String name) {
+        System.out.println("home");
         return ResponseEntity.ok().body(String.format("Hello, %s!", name));
     }
 
