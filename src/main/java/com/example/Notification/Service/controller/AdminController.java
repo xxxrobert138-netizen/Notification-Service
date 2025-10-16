@@ -1,13 +1,12 @@
 package com.example.Notification.Service.controller;
 
+import com.example.Notification.Service.model.User;
 import com.example.Notification.Service.service.UserService;
+import com.example.Notification.Service.util.ConsoleHelper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/admin")
@@ -17,8 +16,25 @@ public class AdminController {
     private UserService userService;
 
     @GetMapping("/user/{name}")
-    public String getUserData(@PathVariable int id) {
-        userService.
+    public ResponseEntity getUserData(@PathVariable(value = "name") String name) {
+        ConsoleHelper.printInformation("user data request by name " + name, ConsoleHelper.MessageType.INFO);
+        User user = userService.getUser(name);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Такого пользователя не существует");
+        }
+        return ResponseEntity.ok().body(user.toString());
+    }
+
+    @PostMapping("/signup")
+    public ResponseEntity postUser(@RequestParam(value = "name", defaultValue = "Robert") String username, @RequestParam(value = "password", defaultValue = "r1r1r1r123") String password) {
+        ConsoleHelper.printInformation("user data request by name " + username + "password " + password, ConsoleHelper.MessageType.INFO);
+        User user = userService.getUser(username);
+        if (user != null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The user with this username is already exists");
+        }
+        user = new User(username, password);
+        userService.save(user);
+        return ResponseEntity.ok().body("The account was created");
     }
 
 }
