@@ -40,8 +40,21 @@ public class User implements UserDetails {
         this.password = password;
     }
 
+    public User(InputSignupAndSigninData data) {
+        username = data.name;
+        password = data.password;
+    }
+
     public User() {
 
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override

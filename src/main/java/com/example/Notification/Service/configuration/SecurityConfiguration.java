@@ -36,7 +36,7 @@ public class SecurityConfiguration {
                         httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                         authorizationManagerRequestMatcherRegistry
-                                .requestMatchers("/signin","/signup").permitAll()
+                                .requestMatchers("account/signin","account/signup").permitAll()
                                 .requestMatchers("account/data").authenticated()
                                 .anyRequest().permitAll())
                 .addFilterBefore(filter, FilterSecurityInterceptor.class)
